@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnbordScreen extends StatelessWidget {
   const OnbordScreen({Key? key}) : super(key: key);
@@ -44,8 +45,12 @@ class OnbordScreen extends StatelessWidget {
                           ),
                           Align(
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 print("go to login");
+                                final pref =
+                                    await SharedPreferences.getInstance();
+                                pref.setString(
+                                    'onboard_key', 'onboardkey123456');
                                 Navigator.pushNamed(context, '/loginPage');
                               },
                               child: Container(

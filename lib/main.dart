@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vendorsouqjumla/domain/dependence_injection/injectable.dart';
+import 'package:vendorsouqjumla/presentation/provider/authprovider.dart';
+import 'package:vendorsouqjumla/presentation/provider/category_provider.dart';
+import 'package:vendorsouqjumla/presentation/provider/dashboardprovider.dart';
+import 'package:vendorsouqjumla/presentation/provider/default_category_provider.dart';
 import 'package:vendorsouqjumla/presentation/provider/homescreenProvider.dart';
+import 'package:vendorsouqjumla/presentation/provider/imagepickerprovider.dart';
 import 'package:vendorsouqjumla/presentation/provider/ordersummaryprovider.dart';
 import 'package:vendorsouqjumla/presentation/screen/authscreen/loginscreen.dart';
 import 'package:vendorsouqjumla/presentation/screen/categoryscreen/addnewcategory.dart';
@@ -28,18 +35,32 @@ import 'package:vendorsouqjumla/presentation/screen/productscreen/addnewproducts
 import 'package:vendorsouqjumla/presentation/screen/productscreen/editanddeleteproductscreen.dart';
 import 'package:vendorsouqjumla/presentation/screen/productscreen/editproductscreen.dart';
 import 'package:vendorsouqjumla/presentation/screen/productscreen/productscreen.dart';
+import 'package:vendorsouqjumla/presentation/screen/splashscreen/splashscreen.dart';
 import 'package:vendorsouqjumla/presentation/screen/stockscreen/editstockshow.dart';
 import 'package:vendorsouqjumla/presentation/screen/stockscreen/editstockview.dart';
 import 'package:vendorsouqjumla/presentation/screen/stockscreen/stockscreen.dart';
 
-void main() {
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configurationInjection();
+  final prefs = await SharedPreferences.getInstance();
+  // prefs.clear();
+  final String? loginToken = prefs.getString('auth_token');
+  print('login token : ${loginToken}');
   runApp(
-    const MyApp(),
+    DevicePreview(
+      builder: (context) => MyApp(
+        initialRoute: '/',
+      ),
+    ),
+    // const MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? initialRoute;
+  const MyApp({super.key, required this.initialRoute});
 
   // This widget is the root of your application.
   @override
@@ -52,8 +73,24 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => Ordersummaryprovider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<Authprovider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<Dashboardprovider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<CategoryProvider>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Imagepickerprovider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<DefaultCategoryProvider>(),
+        ),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'vendor Demo',
         theme: ThemeData(
@@ -61,12 +98,16 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        initialRoute: '/',
+        initialRoute: initialRoute,
         onGenerateRoute: (settings) {
           switch (settings.name) {
             case '/':
-              return MaterialPageRoute(
-                builder: (context) => OnbordScreen(),
+              return _createRoute(
+                Splashscreen(),
+              );
+            case '/onbordScreen':
+              return _createRoute(
+                OnbordScreen(),
               );
             case '/loginPage':
               return _createRoute(
@@ -123,20 +164,35 @@ class MyApp extends StatelessWidget {
                 ActiveOrInActiveUpdate(),
               );
             case '/dashboard':
+              final argus = settings.arguments as Map<String, dynamic>;
+              final String? loginToken = argus['loginToken'];
+              print('login token : ${loginToken}');
               return _createRoute(
-                Dashboardscreen(),
+                Dashboardscreen(
+                  loginToken: '$loginToken',
+                ),
               );
             case '/category':
+              final argus = settings.arguments as Map<String, dynamic>;
+              final String? loginToken = argus['loginToken'];
+              print('login token : ${loginToken}');
               return _createRoute(
-                Categoryscreen(),
+                Categoryscreen(
+                  loginToken: '$loginToken',
+                ),
               );
             case '/addnewcategory':
               return _createRoute(
                 Addnewcategory(),
               );
             case '/addnewdefaultcategory':
+              // // final argus = settings.arguments as Map<String, dynamic>;
+              // // final String? loginToken = argus['loginToken'];
+              // print('login token : ${loginToken}');
               return _createRoute(
-                Defaultcategory(),
+                Defaultcategory(
+                    // loginToken: '$loginToken',
+                    ),
               );
             case '/editCategoryanddelete':
               return _createRoute(
@@ -146,7 +202,6 @@ class MyApp extends StatelessWidget {
               return _createRoute(
                 EditCategory(),
               );
-
             case '/products':
               return _createRoute(
                 ProductScreen(),

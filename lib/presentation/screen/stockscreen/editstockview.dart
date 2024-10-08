@@ -196,7 +196,7 @@ class Editstockview extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(

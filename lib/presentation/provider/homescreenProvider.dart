@@ -7,11 +7,11 @@ class Homescreenprovider extends ChangeNotifier {
       'iconimg': 'assets/images/homesectionicons/Group.png',
       'routename': '/orders',
     },
-    {
-      'title': 'Stocks',
-      'iconimg': 'assets/images/homesectionicons/Group.png',
-      'routename': '/stocks',
-    },
+    // {
+    //   'title': 'Stocks',
+    //   'iconimg': 'assets/images/homesectionicons/Group.png',
+    //   'routename': '/stocks',
+    // },
     {
       'title': 'Dashboard',
       'iconimg': 'assets/images/homesectionicons/apps.png',
@@ -27,11 +27,11 @@ class Homescreenprovider extends ChangeNotifier {
       'iconimg': 'assets/images/homesectionicons/boxes.png',
       'routename': '/products',
     },
-    {
-      'title': 'Offers',
-      'iconimg': 'assets/images/homesectionicons/badge-percent.png',
-      'routename': '/offers',
-    },
+    // {
+    //   'title': 'Offers',
+    //   'iconimg': 'assets/images/homesectionicons/badge-percent.png',
+    //   'routename': '/offers',
+    // },
     {
       'title': 'About Us',
       'iconimg': 'assets/images/homesectionicons/Layer_1.png',

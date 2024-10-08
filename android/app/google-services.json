@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770992172496",
+    "project_id": "souqjumla-a74b1",
+    "storage_bucket": "souqjumla-a74b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770992172496:android:e53069362c02dd3d511dd5",
+        "android_client_info": {
+          "package_name": "com.example.vendorsouqjumla"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_HZj8Ig9dIQG9HSd-TqLvFF3MsoPWgI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

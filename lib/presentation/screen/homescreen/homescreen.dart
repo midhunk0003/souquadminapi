@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vendorsouqjumla/presentation/provider/homescreenProvider.dart';
 import 'package:vendorsouqjumla/presentation/widgets/customappbar.dart';
 
@@ -48,11 +49,16 @@ class Homescreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final items = homeProvider.homeScreenData[index];
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         print("index:$index");
                         final routname = items['routename'];
                         print(routname);
-                        Navigator.pushNamed(context, '$routname');
+                        final loginToken =
+                            await SharedPreferences.getInstance();
+                        final String? loginT =
+                            loginToken.getString('auth_token');
+                        Navigator.pushNamed(context, '$routname',
+                            arguments: {'loginToken': loginT});
                       },
                       child: Container(
                         height: isTbalet ? 140 : 80,
@@ -91,8 +97,9 @@ class Homescreen extends StatelessWidget {
                                     Text(
                                       "${items['title']}",
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                   ],
                                 ),
